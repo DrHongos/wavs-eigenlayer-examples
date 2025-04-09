@@ -19,7 +19,8 @@ RPC_URL?=http://localhost:8545
 SERVICE_MANAGER_ADDR?=`jq -r '.eigen_service_managers.local | .[-1]' .docker/deployments.json`
 SERVICE_TRIGGER_ADDR?=`jq -r '.trigger' "./.docker/script_deploy.json"`
 SERVICE_SUBMISSION_ADDR?=`jq -r '.service_handler' "./.docker/script_deploy.json"`
-COIN_MARKET_CAP_ID?=1
+COIN_MARKET_CAP_ID?=2
+SPORTRADAR_API_KEY?=05gqOhoAoLeCoHvgRpj9yl4ny7znFRTgsgNIN49z
 
 ## check-requirements: verify system requirements are installed
 check-requirements: check-node check-jq check-cargo
@@ -41,6 +42,12 @@ wasi-exec:
 	@$(WAVS_CMD) exec --log-level=info --data /data/.docker --home /data \
 	--component "/data/compiled/${COMPONENT_FILENAME}" \
 	--input `cast format-bytes32-string $(COIN_MARKET_CAP_ID)`
+
+## scores-exec: executing the sports scores oracle component | GAME_ID, SPORTRADAR_API_KEY
+scores-exec:
+	@$(WAVS_CMD) exec --log-level=info --data /data/.docker --home /data \
+	--component "/data/compiled/sports_scores_oracle.wasm" \
+	--input "0x$(shell printf '%s' "$(GAME_ID)|$(SPORTRADAR_API_KEY)" | hexdump -v -e '/1 "%02x"')"
 
 ## update-submodules: update the git submodules
 update-submodules:

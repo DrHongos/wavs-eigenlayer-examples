@@ -124,10 +124,24 @@ make wasi-build # or `make build` to include solidity compilation.
 
 ### Execute WASI component directly
 
-Test run the component locally to validate the business logic works. An ID of 1 is Bitcoin. Nothing will be saved on-chain, just the output of the component is shown.
+Test run the component locally to validate the business logic works. Nothing will be saved on-chain, just the output of the component is shown.
+
+#### ETH Price Oracle
+An ID of 1 is Bitcoin.
 
 ```bash
 COIN_MARKET_CAP_ID=1 make wasi-exec
+```
+
+#### Sports Scores Oracle
+Fetch basketball scores from SportRadar API.
+
+```bash
+# Replace with your actual API key in the Makefile
+# SPORTRADAR_API_KEY=your_api_key_here
+
+# Call with a game ID
+make scores-exec GAME_ID="fa15684d-0966-46e7-a3f8-f1d378692109"
 ```
 
 ## WAVS
