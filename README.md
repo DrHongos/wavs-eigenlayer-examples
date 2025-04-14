@@ -1,8 +1,22 @@
-# [WAVS](https://docs.wavs.xyz) Monorepo Template
+# [WAVS](https://docs.wavs.xyz) Example Apps
 
-**Template for getting started with developing WAVS applications**
+**Templates for getting started with developing WAVS applications**
 
-A template for developing WebAssembly AVS applications using Rust and Solidity, configured for Windows *WSL*, Linux, and MacOS. The sample oracle service fetches the current price of a cryptocurrency from [CoinMarketCap](https://coinmarketcap.com) and saves it on chain.
+### ETH Price Oracle
+
+The ETH Price Oracle is a simple oracle service that fetches the current price of Ethereum from [CoinMarketCap](https://coinmarketcap.com) and saves it on chain.
+
+### Sports Scores Oracle
+
+The Sports Scores Oracle is a simple oracle service that fetches the current scores of basketball games from [SportRadar](https://www.sportradar.com) and saves it on chain.
+
+> Prompt to recreate this component available [here](https://gist.github.com/dabit3/8e1846427e29e77d943b6cbf1bf6a493).
+
+### OpenAI Inference
+
+The OpenAI Inference is a simple oracle service that fetches the current inference of OpenAI from [OpenAI](https://openai.com) and saves it on chain.
+
+> Prompt to recreate this component available [here](https://gist.github.com/dabit3/8be495be73ba520b62cd8fbadffce665).
 
 ## System Requirements
 
