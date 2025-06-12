@@ -1,0 +1,123 @@
+{
+    "generated_at": "2025-06-10T20:20:49+00:00",
+    "sport_event": {
+        "id": "sr:sport_event:57250777",
+        "start_time": "2025-06-01T00:30:00+00:00",
+        "start_time_confirmed": true,
+        "sport_event_context": {
+            "sport": {
+                "id": "sr:sport:1",
+                "name": "Soccer"
+            },
+            "category": {
+                "id": "sr:category:48",
+                "name": "Argentina",
+                "country_code": "ARG"
+            },
+            "competition": {
+                "id": "sr:competition:703",
+                "name": "Primera Nacional",
+                "gender": "men"
+            },
+            "season": {
+                "id": "sr:season:127879",
+                "name": "Primera Nacional 2025",
+                "start_date": "2025-02-07",
+                "end_date": "2025-12-08",
+                "year": "2025",
+                "competition_id": "sr:competition:703"
+            },
+            "stage": {
+                "order": 1,
+                "type": "league",
+                "phase": "regular season",
+                "start_date": "2025-02-07",
+                "end_date": "2025-10-31",
+                "year": "2025"
+            },
+            "round": {
+                "number": 17
+            },
+            "groups": [
+                {
+                    "id": "sr:league:90507",
+                    "name": "Primera Nacional 2025, Group A",
+                    "group_name": "A"
+                }
+            ]
+        },
+        "coverage": {
+            "type": "sport_event",
+            "sport_event_properties": {
+                "lineups": false,
+                "formations": false,
+                "venue": false,
+                "extended_player_stats": false,
+                "extended_team_stats": false,
+                "ballspotting": false,
+                "commentary": false,
+                "fun_facts": true,
+                "goal_scorers": true,
+                "goal_scorers_live": true,
+                "scores": "live",
+                "game_clock": true,
+                "deeper_play_by_play": false,
+                "deeper_player_stats": false,
+                "deeper_team_stats": false,
+                "basic_play_by_play": false,
+                "basic_player_stats": false,
+                "basic_team_stats": false
+            }
+        },
+        "competitors": [
+            {
+                "id": "sr:competitor:23950",
+                "name": "San Martin de Tucuman",
+                "country": "Argentina",
+                "country_code": "ARG",
+                "abbreviation": "SMT",
+                "qualifier": "home",
+                "gender": "male"
+            },
+            {
+                "id": "sr:competitor:373076",
+                "name": "CA San Miguel",
+                "country": "Argentina",
+                "country_code": "ARG",
+                "abbreviation": "CASM",
+                "qualifier": "away",
+                "gender": "male"
+            }
+        ],
+        "sport_event_conditions": {
+            "weather": {
+                "pitch_conditions": "good",
+                "overall_conditions": "medium"
+            },
+            "ground": {
+                "neutral": false
+            }
+        }
+    },
+    "sport_event_status": {
+        "status": "closed",
+        "match_status": "ended",
+        "home_score": 0,
+        "away_score": 1,
+        "winner_id": "sr:competitor:373076",
+        "period_scores": [
+            {
+                "home_score": 0,
+                "away_score": 0,
+                "type": "regular_period",
+                "number": 1
+            },
+            {
+                "home_score": 0,
+                "away_score": 1,
+                "type": "regular_period",
+                "number": 2
+            }
+        ]
+    }
+}

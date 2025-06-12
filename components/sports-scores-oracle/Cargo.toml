@@ -15,6 +15,7 @@ alloy-sol-macro = { workspace = true }
 wstd = { workspace = true }
 alloy-sol-types = { workspace = true }
 anyhow = { workspace = true }
+rhai = "1.22.2"
 
 [lib]
 crate-type = ["cdylib"]

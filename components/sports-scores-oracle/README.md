@@ -28,6 +28,9 @@ To fetch the scores for a specific basketball game, use:
 make scores-exec GAME_ID="fa15684d-0966-46e7-a3f8-f1d378692109"
 ```
 
+// this is mine, to test a soccer game finished
+make scores-exec GAME_ID="sr:sport_event:57250777"
+
 Where `fa15684d-0966-46e7-a3f8-f1d378692109` is the SportRadar game ID.
 
 ## Response Format

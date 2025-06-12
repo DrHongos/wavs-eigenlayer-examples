@@ -23,7 +23,7 @@ SERVICE_MANAGER_ADDR?=`jq -r '.eigen_service_managers.local | .[-1]' .docker/dep
 SERVICE_TRIGGER_ADDR?=`jq -r '.trigger' "./.docker/script_deploy.json"`
 SERVICE_SUBMISSION_ADDR?=`jq -r '.service_handler' "./.docker/script_deploy.json"`
 COIN_MARKET_CAP_ID?=2
-SPORTRADAR_API_KEY?=05gqOhoAoLeCoHvgRpj9yl4ny7znFRTgsgNIN49z
+SPORTRADAR_API_KEY?=OeQ5qqkwMT6sLumdpuhGHcozKxR4lb8jsT5f20gh
 
 ## check-requirements: verify system requirements are installed
 check-requirements: check-node check-jq check-cargo
