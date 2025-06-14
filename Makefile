@@ -11,7 +11,7 @@ COMPONENT_FILENAME ?= eth_price_oracle.wasm
 TRIGGER_EVENT ?= NewTrigger(bytes)
 SERVICE_CONFIG ?= '{"fuel_limit":100000000,"max_gas":5000000,"host_envs":[],"kv":[],"workflow_id":"default","component_id":"default"}'
 AI_COMPONENT_FILENAME ?= openai_inference.wasm
-OPENAI_API_KEY="your-api-key"
+OPENAI_API_KEY=xai-rYf0GusisxsNlvcd8yxyqcfZ3BJLlnsHt9oA54LTytGKqNavE6Z46vLdDaKv1BNHa624HrG5C6A87uth
 SEED ?= 42
 
 # Define common variables
@@ -52,11 +52,11 @@ scores-exec:
 	--component "/data/compiled/sports_scores_oracle.wasm" \
 	--input "0x$(shell printf '%s' "$(GAME_ID)|$(SPORTRADAR_API_KEY)" | hexdump -v -e '/1 "%02x"')"
 
-## ai-exec: executing the OpenAI inference component | PROMPT, OPENAI_API_KEY, SEED
+## ai-exec: executing the OpenAI inference component | ID, OPENAI_API_KEY, SEED
 ai-exec:
 	@$(WAVS_CMD) exec --log-level=info --data /data/.docker --home /data \
 	--component "/data/compiled/${AI_COMPONENT_FILENAME}" \
-	--input "$(PROMPT)|$(OPENAI_API_KEY)|$(SEED)"
+	--input "$(CONDITIONID)|$(QUESTIONHASH)|$(OPENAI_API_KEY)|$(SEED)"
 
 ## update-submodules: update the git submodules
 update-submodules:

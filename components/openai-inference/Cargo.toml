@@ -13,6 +13,10 @@ serde = { workspace = true }
 serde_json = { workspace = true }
 wstd = { workspace = true }
 anyhow = { workspace = true }
+thiserror = "2.0.12"
+cid = "0.11.1"
+multihash = "0.19.3"
+hex = "0.4.3"
 
 [lib]
 crate-type = ["cdylib"]

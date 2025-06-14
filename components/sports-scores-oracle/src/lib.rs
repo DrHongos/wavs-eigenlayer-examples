@@ -10,12 +10,13 @@ use wstd::{http::HeaderValue, runtime::block_on};
 struct Component;
 export!(Component with_types_in bindings);
 
+// uses rhai to execute logic https://github.com/rhaiscript/rhai
+
 // TODO:
 // https://api.sportradar.com/soccer/trial/v4/openapi/swagger/index.html
-// store GAME_ID (and read it) from IPFS CIDs w/ arbitrary logic
-// use rhai to execute logic https://github.com/rhaiscript/rhai
 
-// change response to be reportPayout
+// store GAME_ID (and read it) from IPFS CIDs w/ arbitrary logic
+
 // create submitter & trigger to call for this
 
 // how to handle trigger (besides checking the match is complete) but to create the service close to the endtime
@@ -27,7 +28,7 @@ impl Guest for Component {
 
         // Parse input - expects "GAME_ID|API_KEY"
         let input = std::str::from_utf8(&req).map_err(|e| e.to_string())?;
-        println!("raw input: {}", input);
+        //   println!("raw input: {}", input);
 
         let parts: Vec<&str> = input.split('|').collect();
         if parts.len() != 2 {
@@ -43,8 +44,6 @@ impl Guest for Component {
 
         // TODO:
         // get logic from IPFS
-        // check logic with API data,
-        // prepare answer
         let res = block_on(async move {
             let game_data = get_game_data(game_id, api_key).await?;
             //println!("scores_data: {:?}", game_data);
@@ -78,6 +77,7 @@ impl Guest for Component {
         Ok(output)
     }
 }
+
 /*
 async fn get_question_data(cid: &str) -> Result<String, String> {
     let url = format!("https://ipfs.io/{}", cid);
@@ -89,7 +89,8 @@ async fn get_question_data(cid: &str) -> Result<String, String> {
     //let json: Question = fetch_json(req).await.map_err(|e| e.to_string())?;
     Ok(String::new())
 }
- */
+*/
+
 async fn get_game_data(game_id: &str, api_key: &str) -> Result<MatchResult, String> {
     let url = format!(
         "https://api.sportradar.com/soccer/trial/v4/en/sport_events/{}/summary.json?api_key={}",
