@@ -8,4 +8,4 @@ compiled/*.wasm
 node_modules/
 lcov.info
 .vscode
-Makefile
+/Makefile

@@ -1,5 +1,4 @@
 
-testing IPFS data retrieval
 
-make ai-exec CONDITIONID="0x1750785c8c8f74f27eb4f22e7f5a1f1c0230c7452478e3c13e549dab9f8d8f8c"  // fails if 0x is present
-// anyway, it does not calculate CID correctly
+make ai-exec CONDITIONID="1750785c8c8f74f27eb4f22e7f5a1f1c0230c7452478e3c13e549dab9f8d8f8c" 
+  // fails if 0x is present

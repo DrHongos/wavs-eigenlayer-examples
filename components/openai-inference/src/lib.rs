@@ -13,6 +13,12 @@ use serde_json::{to_string, Value};
 use std::collections::HashMap;
 use wstd::{http::HeaderValue, runtime::block_on};
 
+//  for trigger  decode?
+//use alloy_sol_macro::sol;
+//sol!{
+//      event triggerAVS(bytes32 indexed condition);
+//};
+
 struct Component;
 export!(Component with_types_in bindings);
 
@@ -22,10 +28,17 @@ enum Destination {
     CliOutput,
 }
 
+
 // Function to decode trigger event data
 fn decode_trigger_input(trigger_data: TriggerData) -> Result<(u64, Vec<u8>, Destination)> {
     match trigger_data {
         TriggerData::EthContractEvent(TriggerDataEthContractEvent { log, .. }) => {
+            // TODO: implement trigger
+            //let event: triggerAVS = decode_event_log_data!(log)?;
+            //let trigger_info = triggerAVS::abi_decode(&event._triggerInfo)?;
+            //Ok((trigger_info.triggerId, trigger_info.data.to_vec(), Destination::Ethereum)
+
+
             // This would be used for Ethereum event triggers
             // For simplicity, we're not implementing the full Ethereum event handling
             Err(anyhow::anyhow!("Ethereum event triggers not supported"))
@@ -37,42 +50,47 @@ fn decode_trigger_input(trigger_data: TriggerData) -> Result<(u64, Vec<u8>, Dest
 
 // Function to encode trigger output for Ethereum
 fn encode_trigger_output(trigger_id: u64, output: impl AsRef<[u8]>) -> Vec<u8> {
+    // TODO: implement
+    //WasmResponse {
+    //    payload: solidity::DataWithId {
+    //        triggerId: trigger_id,
+    //        data: output.as_ref().to_vec().into(),
+    //    }
+    //    .abi_encode(),
+    //    ordering: None,
+    //}
+
+
     // For simplicity, we're just returning the output as is
     // In a real implementation, this would encode the output for Ethereum
     output.as_ref().to_vec()
 }
 
-// TODO: get the CID with the condition id (easily from event)
-
 impl Guest for Component {
     fn run(action: TriggerAction) -> std::result::Result<Option<Vec<u8>>, String> {
         // Decode the trigger data
-        log(LogLevel::Info, &format!("Run"));
-        eprintln!("Run");
         let (trigger_id, req, dest) =
             decode_trigger_input(action.data).map_err(|e| e.to_string())?;
 
         // Convert bytes to string
         let input = std::str::from_utf8(&req).map_err(|e| e.to_string())?;
-        log(LogLevel::Info, &format!("Received input: {}", input));
-        eprintln!("input: {:?}", input);
 
         let parts: Vec<&str> = input.split('|').collect();
-        if parts.len() != 4 {
-            return Err("Input must be in format 'CONDITIONID|QUESTIONHASH|OPENAI_API_KEY|SEED'"
-                .to_string());
+        if parts.len() != 3 {
+            return Err("Input must be in format 'CONDITIONID|OPENAI_API_KEY|SEED'".to_string());
         }
 
         let condition_id = parts[0];
-        let cid = parts[1];
-        let api_key = parts[2];
-        let seed = parts[3].parse::<u64>().map_err(|_| "SEED must be an integer".to_string())?;
+        //let cid = parts[1];
+        let api_key = parts[1];
+        let seed = parts[2].parse::<u64>().map_err(|_| "SEED must be an integer".to_string())?;
 
         //let cid = bytes32_to_cid_v1(condition_id).map_err(|e| e.to_string())?;
-        log(LogLevel::Info, &format!("condition: {} -> CID: {:#?}", condition_id, cid));
+        //log(LogLevel::Info, &format!("condition: {} -> CID: {:#?}", condition_id, cid));
 
         let res = block_on(async move {
             // get the IPFS file
+            let cid = get_question_cid(&condition_id).await?;
             let qdata = get_question_data(&cid).await?;
 
             let question_data = QuestionInfo {
@@ -260,6 +278,18 @@ pub async fn call_grok_api(
     Ok(result)
 }
 
+async fn get_question_cid(condition: &str) -> Result<String, String> {
+    let url = format!("https://opinologos.vercel.app/api/questionHash/0x{}", condition);
+    //println!("{}", url);
+
+    let mut req = http_request_get(&url).map_err(|e| e.to_string())?;
+    req.headers_mut().insert("Accept", HeaderValue::from_static("application/json"));
+
+    let json: QuestionHash = fetch_json(req).await.map_err(|e| e.to_string())?;
+    //println!("{:?}", json);
+
+    Ok(json.question_hash)
+}
 async fn get_question_data(cid: &str) -> Result<QuestionTestament, String> {
     let url = format!("https://ipfs.io/ipfs/{}", cid);
     println!("{}", url);

@@ -1,0 +1,103 @@
+// taken from https://github.com/Lay3rLabs/wavs-prediction-market/blob/main/src/contracts/PredictionMarketOracleController.sol
+
+// SPDX-License-Identifier: MIT
+pragma solidity ^0.8.22;
+
+import {IWavsServiceHandler} from "@wavs/interfaces/IWavsServiceHandler.sol";
+import {IWavsServiceManager} from "@wavs/interfaces/IWavsServiceManager.sol";
+import {IWavsTrigger} from "interfaces/IWavsTrigger.sol";
+import {ConditionalTokens} from "../../../fpmm_using_uniswap/src/CT.sol";
+//import {ConditionalTokens} from "@lay3rlabs/conditional-tokens-contracts/ConditionalTokens.sol";
+//import {LMSRMarketMaker} from "@lay3rlabs/conditional-tokens-market-makers/LMSRMarketMaker.sol";
+//import {PredictionMarketFactory} from "./PredictionMarketFactory.sol";
+
+// The contract responsible for triggering the oracle to resolve the market and handling the oracle output and instructing the market maker to resolve the market.
+contract PredictionMarketOracleController is IWavsTrigger, IWavsServiceHandler {
+    // The factory that handles creating and resolving the market.
+    ConditionalTokens public ct;
+
+    /// @inheritdoc IWavsTrigger
+    mapping(TriggerId _triggerId => Trigger _trigger) public triggersById;
+
+    IWavsServiceManager public serviceManager;
+    TriggerId public nextTriggerId;
+
+    constructor(address serviceManager_, address hook) {
+        require(serviceManager_ != address(0), "Invalid service manager");
+
+        ct = ConditionalTokens(hook);
+        serviceManager = IWavsServiceManager(serviceManager_);
+    }
+
+    /**
+     * @param envelope The envelope containing the data.
+     * @param signatureData The signature data.
+     */
+    function handleSignedEnvelope(
+        Envelope calldata envelope,
+        SignatureData calldata signatureData
+    ) external override {
+        serviceManager.validate(envelope, signatureData);
+
+        DataWithId memory dataWithId = abi.decode(
+            envelope.payload,
+            (DataWithId)
+        );
+
+        Trigger memory trigger = triggersById[dataWithId.triggerId];
+        require(trigger.creator != address(0), "Trigger does not exist");
+
+        AvsOutputData memory returnData = abi.decode(
+            dataWithId.data,
+            (AvsOutputData)
+        );
+
+        ct.reportPayouts(returnData.questionId, returnData.payouts);
+
+        // Tell factory to resolve the market
+        //factory.resolveMarket(
+        //    LMSRMarketMaker(returnData.lmsrMarketMaker),
+        //    ConditionalTokens(returnData.conditionalTokens),
+        //    returnData.result
+        //);
+    }
+
+    /**
+     * @dev Trigger the oracle AVS to resolve the market.
+     * @return triggerId The ID of the trigger.
+     */
+     // TODO: add condition as input?
+    function addTrigger(bytes32 condition) external payable returns (TriggerId triggerId) {
+        //require(msg.value == 0.1 ether, "Payment must be exactly 0.1 ETH");
+
+        // Get the next trigger ID
+        triggerId = nextTriggerId;
+        nextTriggerId = TriggerId.wrap(TriggerId.unwrap(nextTriggerId) + 1);
+
+        Trigger memory trigger = Trigger({
+            creator: msg.sender,
+            data: condition //bytes("")
+        });
+        triggersById[triggerId] = trigger;
+
+        TriggerInfo memory triggerInfo = TriggerInfo({
+            triggerId: triggerId,
+            creator: trigger.creator,
+            data: trigger.data
+        });
+
+        emit NewTrigger(abi.encode(triggerInfo));
+    }
+
+    /// @inheritdoc IWavsTrigger
+    function getTrigger(
+        TriggerId triggerId
+    ) external view override returns (TriggerInfo memory _triggerInfo) {
+        Trigger storage _trigger = triggersById[triggerId];
+        _triggerInfo = TriggerInfo({
+            triggerId: triggerId,
+            creator: _trigger.creator,
+            data: _trigger.data
+        });
+    }
+}

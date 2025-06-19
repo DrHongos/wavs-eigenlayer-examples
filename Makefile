@@ -11,7 +11,7 @@ COMPONENT_FILENAME ?= eth_price_oracle.wasm
 TRIGGER_EVENT ?= NewTrigger(bytes)
 SERVICE_CONFIG ?= '{"fuel_limit":100000000,"max_gas":5000000,"host_envs":[],"kv":[],"workflow_id":"default","component_id":"default"}'
 AI_COMPONENT_FILENAME ?= openai_inference.wasm
-OPENAI_API_KEY=xai-rYf0GusisxsNlvcd8yxyqcfZ3BJLlnsHt9oA54LTytGKqNavE6Z46vLdDaKv1BNHa624HrG5C6A87uth
+OPENAI_API_KEY="Your api key"
 SEED ?= 42
 
 # Define common variables
@@ -23,7 +23,7 @@ SERVICE_MANAGER_ADDR?=`jq -r '.eigen_service_managers.local | .[-1]' .docker/dep
 SERVICE_TRIGGER_ADDR?=`jq -r '.trigger' "./.docker/script_deploy.json"`
 SERVICE_SUBMISSION_ADDR?=`jq -r '.service_handler' "./.docker/script_deploy.json"`
 COIN_MARKET_CAP_ID?=2
-SPORTRADAR_API_KEY?=OeQ5qqkwMT6sLumdpuhGHcozKxR4lb8jsT5f20gh
+SPORTRADAR_API_KEY?="Your api key"
 
 ## check-requirements: verify system requirements are installed
 check-requirements: check-node check-jq check-cargo
@@ -56,7 +56,7 @@ scores-exec:
 ai-exec:
 	@$(WAVS_CMD) exec --log-level=info --data /data/.docker --home /data \
 	--component "/data/compiled/${AI_COMPONENT_FILENAME}" \
-	--input "$(CONDITIONID)|$(QUESTIONHASH)|$(OPENAI_API_KEY)|$(SEED)"
+	--input "$(CONDITIONID)|$(OPENAI_API_KEY)|$(SEED)"
 
 ## update-submodules: update the git submodules
 update-submodules:

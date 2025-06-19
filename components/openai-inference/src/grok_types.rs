@@ -33,6 +33,12 @@ pub struct ChatCompletionRequest {
     pub logit_bias: Option<HashMap<u32, f32>>,
 }
  */
+
+#[derive(Serialize, Debug, Deserialize)]
+pub struct QuestionHash {
+    pub question_hash: String,
+}
+
 #[derive(Serialize, Debug, Deserialize)]
 pub struct QuestionTestament {
     pub question: String,
